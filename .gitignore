@@ -7,3 +7,4 @@ tessel/node_modules/*
 
 # ignore image files
 public/uploaded/*
+tessel/pictures/*
