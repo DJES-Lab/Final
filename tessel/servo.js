@@ -17,6 +17,7 @@ servo.on('ready', function () {
     servo.configure(servo1, 0.05, 0.12, function () {
         servo.move(servo1, position);
         console.log('Servo is ready!');
+        console.log('Servo at position ' + position);
     });
 });
 
@@ -26,6 +27,7 @@ exports.servoLeft = function() {
         position = 0;
     }
     servo.move(servo1, position);
+    console.log('Servo at position ' + position);
 };
 
 exports.servoRight = function() {
@@ -34,6 +36,7 @@ exports.servoRight = function() {
         position = 1;
     }
     servo.move(servo1, position);
+    console.log('Servo at position ' + position);
 };
 
 exports.autoPanorama = function() {

@@ -8,7 +8,7 @@ var relay = relaylib.use(tessel.port['B']);
 
 // Wait for the module to connect
 relay.on('ready', function relayReady () {
-    console.log('Ready! Toggling relays...');
+    console.log('Relay is ready!');
     //setInterval(function toggle() {
     //    // Toggle relay channel 1
     //    relay.toggle(1, function toggleOneResult(err) {

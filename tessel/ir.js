@@ -18,11 +18,11 @@ infrared.on('ready', function() {
 
 // If we get data, print it out
 infrared.on('data', function(data) {
-    console.log("Received RX Data: ", JSON.stringify(data));
+    //console.log("Received RX Data: ", JSON.stringify(data));
     if (data.length > 10) {
-        console.log('Received signal');
+        //console.log('Received signal');
         var button = parseIR(data);
-        //console.log(button);
+        console.log(button + ' is pressed');
         switch (button) {
             case 'leftButton':
                 servoLeft();
@@ -41,7 +41,6 @@ infrared.on('data', function(data) {
                 autoPanorama();
                 break;
             default:
-                console.log('Unknown button');
         }
     }
 });
