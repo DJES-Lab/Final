@@ -6,6 +6,9 @@ var relayToggle = require('./relay').relayToggle;
 var servoLeft = require('./servo').servoLeft;
 var servoRight = require('./servo').servoRight;
 var autoPanorama = require('./servo').autoPanorama;
+var takePicture = require('./camera').takePicture;
+var getPictures = require('./camera').getPictures;
+var clearPictures = require('./camera').clearPictures;
 
 // When we're connected
 infrared.on('ready', function() {
@@ -31,11 +34,15 @@ infrared.on('data', function(data) {
                 servoRight();
                 break;
             case 'upButton':
+                var pictures = getPictures();
+                console.log(pictures);
+                clearPictures();
                 break;
             case 'powerButton':
                 relayToggle();
                 break;
             case 'okButton':
+                takePicture();
                 break;
             case 'playButton':
                 autoPanorama();

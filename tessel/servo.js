@@ -4,6 +4,7 @@
 var tessel = require('tessel');
 var servolib = require('servo-pca9685');
 var servo = servolib.use(tessel.port['C']);
+var takePicture = require('./camera').takePicture;
 
 var servo1 = 1; // We have a servo plugged in at position 1
 var position = 0; // Target position of the servo between 0 (min) and 1 (max).
@@ -42,13 +43,13 @@ exports.servoRight = function() {
 exports.autoPanorama = function() {
     position = 0;
     for (var i = 0; i < 10; i++) {
-        setInterval(function () {
+        setTimeout(function () {
             //  Set servo #1 to position pos.
             servo.move(servo1, position);
-            /////////////////////////////////// require camera to take a picture
+            takePicture();
 
             // Increment by 10% (~18 deg for a normal servo)
             position += 0.1;
-        }, 1000 * i); // Every 1 sec
+        }, 3000 * i);
     }
 };
