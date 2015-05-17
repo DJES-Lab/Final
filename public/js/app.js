@@ -29,6 +29,10 @@ angular.module('app', [
                 templateUrl: 'partials/tessel-graph.html',
                 controller: 'tesselGraphController'
             })
+            .when('/pictures', {
+                templateUrl: 'partials/pictures.html',
+                controller: 'picturesController'
+            })
             .when('/login', {
                 templateUrl: 'partials/login.html',
                 controller: 'loginController'

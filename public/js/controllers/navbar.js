@@ -13,6 +13,9 @@ angular.module('app')
         }, {
             "title": "Tessel Graph",
             "link": "tessel-graph/"
+        }, {
+            "title": "Pictures",
+            "link": "pictures/"
         }];
 
         $scope.logout = function() {

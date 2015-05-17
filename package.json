@@ -21,7 +21,8 @@
     "blueimp-file-upload-expressjs": "~0.3.2",
     "connect-redis": "~2.2.0",
     "nohm": "~0.9.6",
-    "lodash": "~3.6.0"
+    "lodash": "~3.6.0",
+    "glob": "~5.0.6"
   },
   "engines": {
     "node": "0.10.25"
