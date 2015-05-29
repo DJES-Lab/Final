@@ -16,7 +16,7 @@ var notificationLED = tessel.led[1]; // Set up an LED to notify when we're takin
 
 var pictures = [];
 
-exports.takePicture = function() {
+exports.takePicture = function(number, d) {
     console.log('Taking a picture');
     notificationLED.low();
     camera.takePicture(function (err, image) {
@@ -25,12 +25,18 @@ exports.takePicture = function() {
         } else {
             notificationLED.high();
             // Name the image
-            //var name = 'picture-' + Math.floor(Date.now() * 1000) + '.jpg';
-            // Save the image
-            //console.log('Picture saving as', name, '...');
-            //console.log(image);
-            //process.sendfile(name, image);
-            pictures.push(image);
+            var name;
+            if (number > 0) {
+                name = d.getTime() + '_' + number + '.jpg';
+            }
+            else {
+                var da = new Date();
+                name = da.getTime() + '.jpg';
+            }
+            pictures.push({
+                image: image,
+                name: name
+            });
             console.log('done.');
             // Turn the camera off to end the script
             //camera.disable();

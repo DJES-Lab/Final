@@ -42,14 +42,15 @@ exports.servoRight = function() {
 
 exports.autoPanorama = function() {
     position = 0;
+    var d = new Date();
     for (var i = 0; i < 10; i++) {
-        setTimeout(function () {
+        setTimeout(function (i) {
             //  Set servo #1 to position pos.
             servo.move(servo1, position);
-            takePicture();
+            takePicture(i + 1, d);
 
             // Increment by 10% (~18 deg for a normal servo)
             position += 0.1;
-        }, 3000 * i);
+        }, 3000 * i, i);
     }
 };

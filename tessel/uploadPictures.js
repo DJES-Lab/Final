@@ -16,8 +16,8 @@ exports.uploadPictures = function() {
     var pictures = getPictures();
     console.log('Uploading pictures ...');
 
-    var d = new Date();
-    var name =  d.getTime() + '.jpg';
-    //process.env.TESSEL_UPLOAD_DIR = '../public/pictures/';
-    process.sendfile(name, pictures[0]);
+    for (var i = 0; i < pictures.length; i++) {
+        process.sendfile(pictures[i].name, pictures[i].image);
+    }
+    clearPictures();
 };
