@@ -211,3 +211,10 @@
     bottom:100% !important;
     top:auto !important;
 }
+
+.pictures {
+    width: 480px;
+    height: 600px;
+    overflow: hidden;
+    margin: auto;
+}

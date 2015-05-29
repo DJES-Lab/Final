@@ -1,4 +1,22 @@
 <h2>Pictures</h2>
-<div ng-repeat="pictureUrl in pictureUrls">
-    <img ng-src="{{pictureUrl}}">
-</div>
+<tabset>
+    <tab heading="Pictures">
+        <carousel class="pictures" interval="slideInterval">
+            <slide ng-repeat="pictureUrl in allPictures.single">
+                <img ng-src="{{pictureUrl}}">
+            </slide>
+        </carousel>
+    </tab>
+    <tab heading="Picture Series">
+        <ul class="pager">
+            <li class="previous"><a href="#" ng-click="prevPictureSeries()">Previous</a></li>
+            <!--<li><a href="#">Panorama</a></li>-->
+            <li class="next" ng-click="nextPictureSeries()"><a href="#">Next</a></li>
+        </ul>
+        <carousel class="pictures" interval="slideInterval">
+            <slide ng-repeat="pictureUrl in allPictures.series[activePictureSeries]">
+                <img ng-src="{{pictureUrl}}">
+            </slide>
+        </carousel>
+    </tab>
+</tabset>
