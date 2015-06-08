@@ -1,10 +1,10 @@
 # ignore node modules
 node_modules/*
-tessel/node_modules/*
+tessel-camera/node_modules/*
+tessel-rfid/node_modules/*
 
 # ignore webstorm IDE files
 .idea/*
 
 # ignore image files
 public/uploaded/*
-tessel/pictures/*
