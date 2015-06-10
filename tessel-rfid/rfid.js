@@ -12,8 +12,8 @@
 
 var tessel = require('tessel');
 var rfidlib = require('rfid-pn532');
-
 var rfid = rfidlib.use(tessel.port['A']);
+var getState = require('./fsm').getState;
 
 rfid.on('ready', function (version) {
     console.log('Ready to read RFID card');
@@ -21,6 +21,17 @@ rfid.on('ready', function (version) {
     rfid.on('data', function(card) {
         console.log('UID:', card.uid);
         //console.log('UID:', card.uid.toString('hex'));
+        var state = getState();
+        switch (state) {
+            case 0:
+                servoLeft();
+                break;
+            case 1:
+                servoRight();
+                break;
+            default:
+                console.log('Error: Unknown tessel-rfid state!')
+        }
     });
 });
 
