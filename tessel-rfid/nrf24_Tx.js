@@ -6,8 +6,6 @@
  * put one tessel+nrf on "ping" mode and another one on "pong" mode
  */
 
-var test = require('./nrf24_Rx');
-
 var tessel = require('tessel'),
     NRF24 = require('rf-nrf24'),
     pipes = [0xF0F0F0F0E1, 0xF0F0F0F0D2],
@@ -20,6 +18,9 @@ var nrf = NRF24.channel(0x4c) // set the RF channel to 76. Frequency = 2400 + RF
     .autoRetransmit({count:15, delay:4000})
     .use(tessel.port['B']);
 
+var getState = require('./fsm').getState;
+var getUid = require('./rfid').getUid;
+
 nrf._debug = false;
 
 nrf.on('ready', function () {
@@ -27,35 +28,34 @@ nrf.on('ready', function () {
         nrf.printDetails();
     }, 5000);
 
-    //console.log("PING out");
-    //var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
-    //    rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
-    //tx.on('ready', function () {
-    //    var n = 0;
-    //    setInterval(function () {
-    //        var b = new Buffer(4); // set buff len of 8 for compat with maniac bug's RF24 lib
-    //        b.fill(0);
-    //        b.writeUInt32BE(n++);
-    //        console.log("Sending", n);
-    //        tx.write(b);
-    //    }, 5e3); // transmit every 5 seconds
-    //});
-    //rx.on('data', function (d) {
-    //    console.log("Got response back:", d);
-    //});
-});
-
-exports.sendRFIDByNrf = function(uid) {
     var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
         rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
     tx.on('ready', function () {
-        console.log('SendingUID:', uid.toString('hex'));
-        tx.write(uid);
+        setInterval(function(){
+            var state = getState();
+            if (state == 0) {
+                console.log('SendingUID:', uid.toString('hex'));
+                var uid = getUid();
+                tx.write(uid);
+            }
+        }, 2000);
     });
     rx.on('data', function (d) {
         console.log("Got response back:", d);
     });
-};
+});
+
+//exports.sendRFIDByNrf = function(uid) {
+//    var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
+//        rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
+//    tx.on('ready', function () {
+//        console.log('SendingUID:', uid.toString('hex'));
+//        tx.write(uid);
+//    });
+//    rx.on('data', function (d) {
+//        console.log("Got response back:", d);
+//    });
+//};
 
 // hold this process open
 process.ref();
