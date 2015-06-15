@@ -19,7 +19,7 @@ var nrf = NRF24.channel(0x4c) // set the RF channel to 76. Frequency = 2400 + RF
     .use(tessel.port['B']);
 
 var getState = require('./fsm').getState;
-var getUid = require('./rfid').getUid;
+//var getUid = require('./rfid').getUid;
 
 nrf._debug = false;
 
@@ -31,14 +31,14 @@ nrf.on('ready', function () {
     var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
         rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
     tx.on('ready', function () {
-        setInterval(function(){
-            var state = getState();
-            if (state == 0) {
-                var uid = getUid();
-                console.log('SendingUID:', uid.toString('hex'));
-                tx.write(uid);
-            }
-        }, 2000);
+        //setInterval(function(){
+        //    var state = getState();
+        //    if (state == 0) {
+        //        var uid = getUid();
+        //        console.log('SendingUID:', uid.toString('hex'));
+        //        tx.write(uid);
+        //    }
+        //}, 2000);
     });
     rx.on('data', function (d) {
         console.log("Got response back:", d);

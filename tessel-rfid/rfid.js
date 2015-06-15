@@ -18,7 +18,7 @@ var setState = require('./fsm').setState;
 //var sendRFIDByNrf = require('./nrf24_Tx').sendRFIDByNrf;
 var event = require('./event');
 
-var uid;
+//var uid;
 
 rfid.on('ready', function (version) {
     console.log('Ready to read RFID card');
@@ -27,7 +27,7 @@ rfid.on('ready', function (version) {
         console.log('UID:', card.uid);
         //console.log('UID:', card.uid.toString('hex'));
         event.trigger('card', card.uid.toString('hex'));
-        uid = card.uid;
+        //uid = card.uid;
         var state = getState();
         switch (state) {
             case 0:
@@ -47,10 +47,6 @@ rfid.on('error', function (err) {
     console.error(err);
 });
 
-//event.on('card', function(data) {
-//    console.log('card: ' + data);
-//});
-
-exports.getUid = function() {
-    return uid;
-};
+//exports.getUid = function() {
+//    return uid;
+//};
