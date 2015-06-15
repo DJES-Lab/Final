@@ -5,6 +5,8 @@
  * requires 2 nrf24 modules (and ideally two tessels)
  * put one tessel+nrf on "ping" mode and another one on "pong" mode
  */
+var setState = require('./fsm').setState;
+var setUid = require('./camera').setUid;
 
 var tessel = require('tessel'),
     NRF24 = require('rf-nrf24'),
@@ -16,7 +18,7 @@ var nrf = NRF24.channel(0x4c) // set the RF channel to 76. Frequency = 2400 + RF
     .dataRate('1Mbps')
     .crcBytes(2) // 2 byte CRC
     .autoRetransmit({count:15, delay:4000})
-    .use(tessel.port['D']);
+    .use(tessel.port['B']);
 
 nrf._debug = false;
 
@@ -26,11 +28,17 @@ nrf.on('ready', function () {
     }, 5000);
 
     console.log("PONG back");
-    var rx = nrf.openPipe('rx', pipes[0], {size: 4});
-    tx = nrf.openPipe('tx', pipes[1], {autoAck: false});
+    var rx = nrf.openPipe('rx', pipes[0], {size: 4}),
+        tx = nrf.openPipe('tx', pipes[1], {autoAck: false});
     rx.on('data', function (d) {
-        console.log("Got data, will respond", d);
-        tx.write(d);
+        //console.log("Got data, will respond", d);
+        //tx.write(d);
+
+        setState(1);
+        setUid(d.toString('hex'));
+        setTimeout(function(){
+            setState(0);
+        }, 60000); // 1 minute
     });
     tx.on('error', function (e) {
         console.warn("Error sending reply.", e);

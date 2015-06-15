@@ -15,6 +15,7 @@ var camera = require('camera-vc0706').use(tessel.port['D']);
 var notificationLED = tessel.led[1]; // Set up an LED to notify when we're taking a picture
 
 var pictures = [];
+var uid;
 
 exports.takePicture = function(number, d) {
     console.log('Taking a picture');
@@ -50,6 +51,10 @@ exports.getPictures = function() {
 
 exports.clearPictures = function() {
     pictures.length = 0;
+};
+
+exports.setUid = function(id) {
+    uid = id;
 };
 
 // Wait for the camera module to say it's ready
