@@ -7,16 +7,17 @@ var event = require('./event');
 var rfid = require('./rfid');
 
 var getRequestHandler = function (req, res) {
-    res.setTimeout(10000, function () {
-        console.log('Tessel server timeout! No RFID cards!');
-    });
+    //res.setTimeout(10000, function () {
+    //    console.log('Tessel server timeout! No RFID cards!');
+    //});
     console.log('Got HTTP GET Request');
-    event.on('card', function(data) {
-       console.log('card: ' + data);
-    });
-    //res.writeHeader(200, { 'Content-Type': 'text/plain' });
-    res.write('Testing ...');
-    res.end();
+    var cardListener = function(data) {
+        console.log('card: ' + data);
+        res.write('Testing ... ' + data);
+        res.end();
+        event.removeListener('card', cardListener);
+    };
+    event.on('card', cardListener);
 };
 
 var server = http.createServer(function (req, res) {
