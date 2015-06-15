@@ -9,6 +9,7 @@ var autoPanorama = require('./servo').autoPanorama;
 var uploadPictures = require('./uploadPictures').uploadPictures;
 var takePicture = require('./camera').takePicture;
 var getState = require('./fsm').getState;
+var nrf24_Rx = require('./nrf24_Rx');
 //var getPictures = require('./camera').getPictures;
 //var clearPictures = require('./camera').clearPictures;
 
