@@ -2,13 +2,18 @@
  * Created by chen on 2015/6/8.
  */
 var http = require('http');
-var config = require('./../tessel-camera/config');
+var config = require('./config');
+var event = require('./event');
+var rfid = require('./rfid');
 
 var getRequestHandler = function (req, res) {
     res.setTimeout(10000, function () {
         console.log('Tessel server timeout! No RFID cards!');
     });
     console.log('Got HTTP GET Request');
+    event.on('card', function(data) {
+       console.log('card: ' + data);
+    });
     //res.writeHeader(200, { 'Content-Type': 'text/plain' });
     res.write('Testing ...');
     res.end();
