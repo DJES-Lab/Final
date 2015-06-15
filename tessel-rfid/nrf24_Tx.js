@@ -27,24 +27,35 @@ nrf.on('ready', function () {
         nrf.printDetails();
     }, 5000);
 
-    console.log("PING out");
+    //console.log("PING out");
+    //var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
+    //    rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
+    //tx.on('ready', function () {
+    //    var n = 0;
+    //    setInterval(function () {
+    //        var b = new Buffer(4); // set buff len of 8 for compat with maniac bug's RF24 lib
+    //        b.fill(0);
+    //        b.writeUInt32BE(n++);
+    //        console.log("Sending", n);
+    //        tx.write(b);
+    //    }, 5e3); // transmit every 5 seconds
+    //});
+    //rx.on('data', function (d) {
+    //    console.log("Got response back:", d);
+    //});
+});
 
+exports.sendRFIDByNrf = function(uid) {
     var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
         rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
     tx.on('ready', function () {
-        var n = 0;
-        setInterval(function () {
-            var b = new Buffer(4); // set buff len of 8 for compat with maniac bug's RF24 lib
-            b.fill(0);
-            b.writeUInt32BE(n++);
-            console.log("Sending", n);
-            tx.write(b);
-        }, 5e3); // transmit every 5 seconds
+        console.log('SendingUID:', uid.toString('hex'));
+        tx.write(uid);
     });
     rx.on('data', function (d) {
         console.log("Got response back:", d);
     });
-});
+};
 
 // hold this process open
 process.ref();

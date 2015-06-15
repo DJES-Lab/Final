@@ -5,6 +5,9 @@ var http = require('http');
 var config = require('./../tessel-camera/config');
 
 var getRequestHandler = function (req, res) {
+    res.setTimeout(10000, function () {
+        console.log('Tessel server timeout! No RFID cards!');
+    });
     console.log('Got HTTP GET Request');
     //res.writeHeader(200, { 'Content-Type': 'text/plain' });
     res.write('Testing ...');

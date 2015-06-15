@@ -12,8 +12,10 @@
 
 var tessel = require('tessel');
 var rfidlib = require('rfid-pn532');
-var rfid = rfidlib.use(tessel.port['A']);
+var rfid = rfidlib.use(tessel.port['D']);
 var getState = require('./fsm').getState;
+var setState = require('./fsm').setState;
+var sendRFIDByNrf = require('./nrf24_Tx').sendRFIDByNrf;
 
 rfid.on('ready', function (version) {
     console.log('Ready to read RFID card');
@@ -24,10 +26,11 @@ rfid.on('ready', function (version) {
         var state = getState();
         switch (state) {
             case 0:
-                servoLeft();
+                sendRFIDByNrf(card.uid);
                 break;
             case 1:
-                servoRight();
+                //sendRFIDByHttp();
+                setState(0);
                 break;
             default:
                 console.log('Error: Unknown tessel-rfid state!')
