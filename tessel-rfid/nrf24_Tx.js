@@ -34,8 +34,8 @@ nrf.on('ready', function () {
         setInterval(function(){
             var state = getState();
             if (state == 0) {
-                console.log('SendingUID:', uid.toString('hex'));
                 var uid = getUid();
+                console.log('SendingUID:', uid.toString('hex'));
                 tx.write(uid);
             }
         }, 2000);
