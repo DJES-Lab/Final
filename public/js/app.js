@@ -8,6 +8,7 @@ angular.module('app', [
   'ngResource',
   'ngSanitize',
   'http-auth-interceptor',
+  'mwl.bluebird',
   'ui.bootstrap',
   'ui.select',
   'bgf.paginateAnything',

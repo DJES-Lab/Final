@@ -218,3 +218,45 @@
     overflow: hidden;
     margin: auto;
 }
+
+.contailner {
+    line-height:0;
+    text-align:justify;
+    background:lightgreen;
+    margin:1em;
+}
+.contailner > * {
+    display:inline-block;
+    line-height:1.2em;
+}
+.contailner:after {
+    content:'';
+    display:inline-block;
+    width:99%;
+    vertical-align:top;/* or bottom to swallow last gaps */
+}
+
+.glyphicon-spin {
+    -webkit-animation: spin 1000ms infinite linear;
+    animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
