@@ -16,6 +16,9 @@ angular.module('app')
         }, {
             "title": "Pictures",
             "link": "pictures/"
+        }, {
+            "title": "Gallery",
+            "link": "rfid-pictures/"
         }];
 
         $scope.logout = function() {

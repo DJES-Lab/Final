@@ -1,0 +1,27 @@
+<h2>Gallery</h2>
+<tabset>
+    <tab heading="My Pictures" ng-click="getRfidPictures('private')">
+        <div ng-show="rfidPicturesModel.loadingPictures">
+            <h4>Loading Pictures... <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></h4>
+        </div>
+        <div ng-repeat="pictureUrl in rfidPicturesModel.private">
+            <img ng-src="{{pictureUrl}}">
+        </div>
+    </tab>
+    <tab heading="Public Pictures" ng-click="getRfidPictures('public')">
+        <div ng-show="rfidPicturesModel.loadingPictures">
+            <h4>Loading Pictures... <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></h4>
+        </div>
+        <div ng-repeat="pictureUrl in rfidPicturesModel.public">
+            <img ng-src="{{pictureUrl}}">
+        </div>
+    </tab>
+    <tab heading="VIP Pictures" ng-click="getRfidPictures('vip')">
+        <div ng-show="rfidPicturesModel.loadingPictures || !rfidPicturesModel.vip.length">
+            <h4>To see VIP pictures, please use your RFID card to validate your identity... <span ng-show="rfidPicturesModel.loadingPictures" class="glyphicon glyphicon-refresh glyphicon-spin"></span></h4>
+        </div>
+        <div ng-repeat="pictureUrl in rfidPicturesModel.vip">
+            <img ng-src="{{pictureUrl}}">
+        </div>
+    </tab>
+</tabset>

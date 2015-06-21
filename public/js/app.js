@@ -34,6 +34,10 @@ angular.module('app', [
                 templateUrl: 'partials/pictures.html',
                 controller: 'picturesController'
             })
+            .when('/rfid-pictures', {
+                templateUrl: 'partials/rfid-pictures.html',
+                controller: 'rfidPicturesController'
+            })
             .when('/login', {
                 templateUrl: 'partials/login.html',
                 controller: 'loginController'
