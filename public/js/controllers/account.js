@@ -2,7 +2,7 @@
  * Created by derek on 2015/4/13.
  */
 angular.module('app')
-    .controller('accountController', function ($rootScope, $scope, Auth, RfidCard, $http, $location, growl) {
+    .controller('accountController', function ($rootScope, $scope, $timeout, Auth, RfidCard, $http, $q, $location, growl) {
         var setPermissionModels = function(cards) {
             cards.forEach(function(card) {
                 card.permissionModel = card.permission;
@@ -10,7 +10,7 @@ angular.module('app')
         };
 
         var getCards = function() {
-            RfidCard.getCards()
+            return RfidCard.getCards()
                 .then(function(rfids) {
                     $scope.rfidCardsModel.cards = rfids;
                     setPermissionModels($scope.rfidCardsModel.cards);
@@ -19,7 +19,8 @@ angular.module('app')
 
         $scope.rfidCardsModel = {
             cards: [],
-            waitingRfidCard: false
+            waitingRfidCard: false,
+            permissionChanged: false
         };
 
         $scope.changePasswordModel = {
@@ -72,16 +73,49 @@ angular.module('app')
             });
         };
 
-        $scope.updatePermission = function(rfidId, newPermission, oldPermission) {
-            if (newPermission != oldPermission) {
-                RfidCard.updatePermission(rfidId, newPermission)
-                    .then(function(rfid) {
-                        growl.success('Permission updated successfully! Rfid: ' + rfid.rfid + ' New permission: ' + rfid.permission);
-                        getCards();
+        //$scope.updatePermission = function(rfidId, newPermission, oldPermission) {
+        //    if (newPermission != oldPermission) {
+        //        RfidCard.updatePermission(rfidId, newPermission)
+        //            .then(function(rfid) {
+        //                growl.success('Permission updated successfully! Rfid: ' + rfid.rfid + ' New permission: ' + rfid.permission);
+        //                getCards();
+        //            })
+        //            .catch(function(err) {
+        //                growl.error('Failed updating permission: ' + oldPermission + '->' + newPermission + '! Error: ' + err.message);
+        //            });
+        //    }
+        //};
+
+        $scope.checkPermissionChanged = function() {
+            $timeout(function() {
+                if ($scope.rfidCardsModel.cards.length) {
+                    $scope.rfidCardsModel.permissionChanged = _.some($scope.rfidCardsModel.cards.map(function(card) {
+                        return card.permissionModel != card.permission;
+                    }));
+                }
+            });
+        };
+
+        $scope.updatePermissions = function() {
+            if ($scope.rfidCardsModel.cards.length) {
+                var updatePromises = [];
+                $scope.rfidCardsModel.cards.forEach(function(card) {
+                    if (card.permissionModel != card.permission) {
+                        updatePromises.push(RfidCard.updatePermission(card.id, card.permissionModel));
+                    }
+                });
+                $q.all(updatePromises)
+                    .then(function(rfids) {
+                        rfids.forEach(function(rfid) {
+                            growl.success('Permission updated successfully! Rfid: ' + rfid.rfid + ' New permission: ' + rfid.permission);
+                        });
+                        return getCards();
                     })
+                    .then($scope.checkPermissionChanged)
                     .catch(function(err) {
-                        growl.error('Failed updating permission: ' + oldPermission + '->' + newPermission + '! Error: ' + err.message);
-                    });
+                        growl.error('Failed updating permission! Error: ' + err.message);
+                        $scope.checkPermissionChanged();
+                    })
             }
         };
 

@@ -14,12 +14,12 @@
                             <span style="vertical-align: middle"><strong>{{card.rfid}}</strong></span>
                         </div>
                         <div class="btn-group">
-                            <label class="btn btn-success" ng-model="card.permissionModel" btn-radio="0">Public</label>
-                            <label class="btn btn-success" ng-model="card.permissionModel" btn-radio="1">VIP</label>
-                            <label class="btn btn-success" ng-model="card.permissionModel" btn-radio="2">Private</label>
+                            <label class="btn btn-success" ng-class="{'btn-danger':(card.permissionModel != card.permission && card.permission == 0)}" ng-model="card.permissionModel" btn-radio="0" ng-click="checkPermissionChanged()">Public</label>
+                            <label class="btn btn-success" ng-class="{'btn-danger':(card.permissionModel != card.permission && card.permission == 1)}" ng-model="card.permissionModel" btn-radio="1" ng-click="checkPermissionChanged()">VIP</label>
+                            <label class="btn btn-success" ng-class="{'btn-danger':(card.permissionModel != card.permission && card.permission == 2)}" ng-model="card.permissionModel" btn-radio="2" ng-click="checkPermissionChanged()">Private</label>
                         </div>
-                        <button class="btn btn-success" ng-class="{'btn-danger':(card.permissionModel != card.permission)}" ng-click="updatePermission(card.id, card.permissionModel, card.permission)"><i class="glyphicon glyphicon-ok"></i></button>
                     </div>
+                    <button class="btn btn-lg btn-danger btn-block" ng-show="rfidCardsModel.permissionChanged" ng-click="updatePermissions()">Update RFID Card Permissions <span ng-show="rfidCardsModel.waitingRfidCard" class="glyphicon glyphicon-refresh glyphicon-spin"></span></button>
                     <button class="btn btn-lg btn-success btn-block" ng-click="addNewCard()">Add New RFID Card <span ng-show="rfidCardsModel.waitingRfidCard" class="glyphicon glyphicon-refresh glyphicon-spin"></span></button>
                 </accordion-group>
                 <accordion-group is-open="status.changePassword.open">
