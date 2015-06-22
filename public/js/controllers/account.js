@@ -20,6 +20,7 @@ angular.module('app')
         $scope.rfidCardsModel = {
             cards: [],
             waitingRfidCard: false,
+            waitingPermissionUpdate: false,
             permissionChanged: false
         };
 
@@ -99,6 +100,7 @@ angular.module('app')
         $scope.updatePermissions = function() {
             if ($scope.rfidCardsModel.cards.length) {
                 var updatePromises = [];
+                $scope.rfidCardsModel.waitingPermissionUpdate = true;
                 $scope.rfidCardsModel.cards.forEach(function(card) {
                     if (card.permissionModel != card.permission) {
                         updatePromises.push(RfidCard.updatePermission(card.id, card.permissionModel));
@@ -109,10 +111,12 @@ angular.module('app')
                         rfids.forEach(function(rfid) {
                             growl.success('Permission updated successfully! Rfid: ' + rfid.rfid + ' New permission: ' + rfid.permission);
                         });
+                        $scope.rfidCardsModel.waitingPermissionUpdate = false;
                         return getCards();
                     })
                     .then($scope.checkPermissionChanged)
                     .catch(function(err) {
+                        $scope.rfidCardsModel.waitingPermissionUpdate = false;
                         growl.error('Failed updating permission! Error: ' + err.message);
                         $scope.checkPermissionChanged();
                     })
