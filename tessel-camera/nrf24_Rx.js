@@ -35,7 +35,7 @@ nrf.on('ready', function () {
         //tx.write(d);
 
         setState(1);
-        setUid(d.toString('hex'));
+        setUid(d);
         setTimeout(function(){
             setState(0);
         }, 60000); // 1 minute

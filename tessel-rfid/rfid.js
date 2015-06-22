@@ -15,8 +15,11 @@ var rfidlib = require('rfid-pn532');
 var rfid = rfidlib.use(tessel.port['D']);
 var getState = require('./fsm').getState;
 var setState = require('./fsm').setState;
-//var sendRFIDByNrf = require('./nrf24_Tx').sendRFIDByNrf;
 var event = require('./event');
+
+// To initiate running of the two modules
+var tesselServer = require('./tesselServer');
+var nrf24_Tx = require('./nrf24_Tx');
 
 //var uid;
 
@@ -26,15 +29,16 @@ rfid.on('ready', function (version) {
     rfid.on('data', function(card) {
         console.log('UID:', card.uid);
         //console.log('UID:', card.uid.toString('hex'));
-        event.trigger('card', card.uid.toString('hex'));
         //uid = card.uid;
         var state = getState();
         switch (state) {
             case 0:
                 //sendRFIDByNrf(card.uid);
+                event.trigger('sendRFIDByNrf', card.uid.toString('hex'));
                 break;
             case 1:
                 //sendRFIDByHttp();
+                event.trigger('sendRFIDByHttp', card.uid.toString('hex'));
                 setState(0);
                 break;
             default:
