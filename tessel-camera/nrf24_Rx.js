@@ -7,6 +7,7 @@
  */
 var setState = require('./fsm').setState;
 var setUid = require('./camera').setUid;
+var clearPictures = require('./camera').clearPictures;
 
 var tessel = require('tessel'),
     NRF24 = require('rf-nrf24'),
@@ -28,16 +29,17 @@ nrf.on('ready', function () {
     //}, 5000);
 
     console.log("NrfRx is ready!");
-    var rx = nrf.openPipe('rx', pipes[0], {size: 4}),
+    var rx = nrf.openPipe('rx', pipes[0], {size: 8}),
         tx = nrf.openPipe('tx', pipes[1], {autoAck: false});
     rx.on('data', function (d) {
-        //console.log("Got data, will respond", d);
+        console.log("nrf24_RX: Got rfid " + d.toString());
         //tx.write(d);
 
         setState(1);
         setUid(d);
         setTimeout(function(){
             setState(0);
+            clearPictures();
         }, 60000); // 1 minute
     });
     tx.on('error', function (e) {
