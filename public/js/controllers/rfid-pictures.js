@@ -34,6 +34,9 @@ angular.module('app')
                 .then(function(pictureUrls) {
                     $scope.rfidPicturesModel.loadingPictures = false;
                     $scope.rfidPicturesModel[permissionType] = pictureUrls;
+                    if (permissionType == 'vip') {
+                        growl.success('Identity Confirmed!');
+                    }
                 })
                 .catch(function(err) {
                     $scope.rfidPicturesModel.loadingPictures = false;

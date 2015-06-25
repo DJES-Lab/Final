@@ -11,6 +11,7 @@ var tessel = require('tessel'),
     pipes = [0xF0F0F0F0E1, 0xF0F0F0F0D2],
     role = 'ping'; // swap this to pong if you want to wait for receive
 
+var event = require('./event');
 var nrf = NRF24.channel(0x4c) // set the RF channel to 76. Frequency = 2400 + RF_CH [MHz] = 2476MHz
     .transmitPower('PA_MAX') // set the transmit power to max
     .dataRate('1Mbps')
