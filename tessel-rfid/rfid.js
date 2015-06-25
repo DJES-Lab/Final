@@ -34,10 +34,12 @@ rfid.on('ready', function (version) {
         switch (state) {
             case 0:
                 //sendRFIDByNrf(card.uid);
+                console.log('sendRFIDByNrf');
                 event.trigger('sendRFIDByNrf', card.uid.toString('hex'));
                 break;
             case 1:
                 //sendRFIDByHttp();
+                console.log('sendRFIDByHttp');
                 event.trigger('sendRFIDByHttp', card.uid.toString('hex'));
                 setState(0);
                 break;

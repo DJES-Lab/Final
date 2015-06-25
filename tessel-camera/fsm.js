@@ -3,7 +3,8 @@
  */
 //finite state machine
 // state 0 = locked
-// state 1 = unlocked
+// state 1 = unlocked for using camera
+// state 2 = unlocked for uploading profile
 var state = 0;
 
 exports.getState = function() {

@@ -32,7 +32,11 @@ nrf.on('ready', function () {
     tx.on('ready', function () {
         var cardListener = function(data) {
             console.log('card: ' + data);
-            tx.write(data);
+            var b = new Buffer(8); // set buff len of 8 for compat with maniac bug's RF24 lib
+            //b.fill(data);
+            b.write(data, 0);
+            console.log(b.toString());
+            tx.write(b);
         };
         event.on('sendRFIDByNrf', cardListener);
     });

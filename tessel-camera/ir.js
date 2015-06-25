@@ -33,7 +33,10 @@ infrared.on('data', function(data) {
     if (data.length > 10) {
         //console.log('Received signal');
         var state = getState();
-        if (state == 1) {
+        if (state == 0) {
+            console.log('Tessel-camera is locked. Please register with an RFID card.')
+        }
+        else {
             var button = parseIR(data);
             console.log(button + ' is pressed');
             switch (button) {
@@ -50,7 +53,12 @@ infrared.on('data', function(data) {
                     //relayToggle();
                     break;
                 case 'okButton':
-                    takePicture();
+                    if (state == 1) {
+                        takePicture('userId');
+                    }
+                    else {
+                        takePicture('userName');
+                    }
                     break;
                 case 'playButton':
                     // Deprecated: only used in ESLab3
@@ -58,9 +66,6 @@ infrared.on('data', function(data) {
                     break;
                 default:
             }
-        }
-        else {
-            console.log('Tessel-camera is locked. Please register with an RFID card.')
         }
     }
 });

@@ -6,6 +6,7 @@
  * put one tessel+nrf on "ping" mode and another one on "pong" mode
  */
 var setState = require('./fsm').setState;
+var getState = require('./fsm').getState;
 var setUid = require('./camera').setUid;
 var clearPictures = require('./camera').clearPictures;
 
@@ -34,13 +35,16 @@ nrf.on('ready', function () {
     rx.on('data', function (d) {
         console.log("nrf24_RX: Got rfid " + d.toString());
         //tx.write(d);
-
-        setState(1);
-        setUid(d);
-        setTimeout(function(){
-            setState(0);
-            clearPictures();
-        }, 60000); // 1 minute
+        
+        var state = getState();
+        if (state != 2) {
+            setState(1);
+            setUid(d);
+            setTimeout(function () {
+                setState(0);
+                clearPictures();
+            }, 60000); // 1 minute
+        }
     });
     tx.on('error', function (e) {
         console.warn("Error sending reply.", e);

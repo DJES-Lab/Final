@@ -16,8 +16,9 @@ var notificationLED = tessel.led[1]; // Set up an LED to notify when we're takin
 
 var pictures = [];
 var uid;
+var uName;
 
-exports.takePicture = function(number, d) {
+exports.takePicture = function(type) {
     console.log('Taking a picture');
     notificationLED.low();
     camera.takePicture(function (err, image) {
@@ -27,12 +28,11 @@ exports.takePicture = function(number, d) {
             notificationLED.high();
             // Name the image
             var name;
-            if (number > 0) {
-                // Deprecated: only used in ESLab3
-                //name = d.getTime() + '_' + number + '.jpg';
+            var da = new Date();
+            if (type == 'userName') {
+                name = uName + '_' + da.getTime() + '.jpg';
             }
             else {
-                var da = new Date();
                 name = uid + '_' + da.getTime() + '.jpg';
             }
             pictures.push({
@@ -56,6 +56,10 @@ exports.clearPictures = function() {
 
 exports.setUid = function(id) {
     uid = id;
+};
+
+exports.setUName = function(name) {
+    uName = name;
 };
 
 // Wait for the camera module to say it's ready
