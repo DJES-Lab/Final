@@ -53,7 +53,8 @@ infrared.on('data', function(data) {
                     takePicture();
                     break;
                 case 'playButton':
-                    autoPanorama();
+                    // Deprecated: only used in ESLab3
+                    //autoPanorama();
                     break;
                 default:
             }

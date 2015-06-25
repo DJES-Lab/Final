@@ -28,11 +28,12 @@ exports.takePicture = function(number, d) {
             // Name the image
             var name;
             if (number > 0) {
-                name = d.getTime() + '_' + number + '.jpg';
+                // Deprecated: only used in ESLab3
+                //name = d.getTime() + '_' + number + '.jpg';
             }
             else {
                 var da = new Date();
-                name = da.getTime() + '.jpg';
+                name = uid + '_' + da.getTime() + '.jpg';
             }
             pictures.push({
                 image: image,

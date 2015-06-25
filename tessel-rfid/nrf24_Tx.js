@@ -21,10 +21,11 @@ var nrf = NRF24.channel(0x4c) // set the RF channel to 76. Frequency = 2400 + RF
 nrf._debug = false;
 
 nrf.on('ready', function () {
-    setTimeout(function(){
-        nrf.printDetails();
-    }, 5000);
+    //setTimeout(function(){
+    //    nrf.printDetails();
+    //}, 5000);
 
+    console.log("NrfTx is ready!");
     var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
         rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
     tx.on('ready', function () {

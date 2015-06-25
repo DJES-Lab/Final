@@ -23,11 +23,11 @@ var nrf = NRF24.channel(0x4c) // set the RF channel to 76. Frequency = 2400 + RF
 nrf._debug = false;
 
 nrf.on('ready', function () {
-    setTimeout(function(){
-        nrf.printDetails();
-    }, 5000);
+    //setTimeout(function(){
+    //    nrf.printDetails();
+    //}, 5000);
 
-    console.log("PONG back");
+    console.log("NrfRx is ready!");
     var rx = nrf.openPipe('rx', pipes[0], {size: 4}),
         tx = nrf.openPipe('tx', pipes[1], {autoAck: false});
     rx.on('data', function (d) {
