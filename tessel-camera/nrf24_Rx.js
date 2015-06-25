@@ -35,7 +35,7 @@ nrf.on('ready', function () {
     rx.on('data', function (d) {
         console.log("nrf24_RX: Got rfid " + d.toString());
         //tx.write(d);
-        
+
         var state = getState();
         if (state != 2) {
             setState(1);

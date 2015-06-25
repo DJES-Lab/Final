@@ -30,7 +30,7 @@ exports.takePicture = function(type) {
             var name;
             var da = new Date();
             if (type == 'userName') {
-                name = uName + '_' + da.getTime() + '.jpg';
+                name = '_' + uName + '_' + da.getTime() + '.jpg';
             }
             else {
                 name = uid + '_' + da.getTime() + '.jpg';
