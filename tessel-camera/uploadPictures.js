@@ -6,9 +6,7 @@ var tessel = require('tessel');
 //http.post = require('./httpJsonPost');
 //var serverConfig = require('./config').server;
 
-//var cameraAPI = require('./camera');
-var getPictures = require('./camera').getPictures;
-var clearPictures = require('./camera').clearPictures;
+var api = require('./api');
 var getState = require('./fsm').getState;
 var setState = require('./fsm').setState;
 var event = require('./event');
@@ -16,14 +14,13 @@ var event = require('./event');
 //var url = 'http://' + serverConfig.host + ':' + serverConfig.port;
 
 exports.uploadPictures = function() {
-    var pictures = getPictures();
+    var pictures = api.getPictures();
     console.log('Uploading pictures ...');
 
     if (pictures.length > 0) {
         for (var i = 0; i < pictures.length; i++) {
             process.sendfile(pictures[i].name, pictures[i].image);
         }
-        clearPictures();
         var state = getState();
         if (state == 2) {
             setState(0);
@@ -32,6 +29,7 @@ exports.uploadPictures = function() {
             });
             event.trigger('uploadProfile', pictureNames);
         }
+        api.clearPictures();
     }
     else {
         console.log('No pictures to be uploaded!');

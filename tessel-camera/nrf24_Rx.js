@@ -7,8 +7,7 @@
  */
 var setState = require('./fsm').setState;
 var getState = require('./fsm').getState;
-var setUid = require('./camera').setUid;
-var clearPictures = require('./camera').clearPictures;
+var api = require('./api');
 
 var tessel = require('tessel'),
     NRF24 = require('rf-nrf24'),
@@ -39,10 +38,10 @@ nrf.on('ready', function () {
         var state = getState();
         if (state != 2) {
             setState(1);
-            setUid(d);
+            api.setUid(d);
             setTimeout(function () {
                 setState(0);
-                clearPictures();
+                api.clearPictures();
             }, 60000); // 1 minute
         }
     });

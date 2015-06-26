@@ -56,7 +56,7 @@ angular.module('app', [
         $locationProvider.html5Mode(true);
 
         growlProvider.globalTimeToLive(5000);
-        growlProvider.globalPosition('bottom-left');
+        growlProvider.globalPosition('bottom-right');
     })
     .run(function($rootScope, $location, Auth) {
         $rootScope.$watch('currentUser', function(currentUser) {

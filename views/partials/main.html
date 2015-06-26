@@ -1,2 +1,11 @@
 <h2 ng-show="!currentUser">Welcome. Please login.</h2>
-<h2 ng-show="currentUser">Hello {{currentUser.username}}</h2>
+<h2 ng-show="currentUser">Hello <a href="/account" style="text-decoration: none">{{currentUser.username}}</a></h2>
+<div class="col-sm-6 col-md-3">
+    <div class="thumbnail">
+        <img ng-src="{{currentUser.activeProfile ? currentUser.activeProfile : 'icons/default-user.png'}}">
+    </div>
+</div>
+<div class="col-sm-6 col-md-6" ng-show="!currentUser.activeProfile">
+    <h4>You don't have a profile picture yet!</h4>
+    <h4>Goto <a style="text-decoration: none" href="/account">Account Page</a> to upload your profile pictures!</h4>
+</div>

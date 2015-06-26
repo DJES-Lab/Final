@@ -5,7 +5,7 @@ var http = require('http');
 var config = require('./config');
 var event = require('./event');
 var setState = require('./fsm').setState;
-var setUName = require('./camera').setUName;
+var api = require('./api');
 
 // To initiate running of the module
 var ir = require('./ir');
@@ -21,9 +21,8 @@ var postRequestHandler = function (req, res) {
         post_request_body += data;
     });
     req.on('end', function (data) {
-        //console.log(post_request_body);
         var obj = JSON.parse(post_request_body);
-        setUName(obj.username);
+        api.setUName(obj.username);
     });
     var pictureListener = function(pictureNames) {
         console.log('Returning picture names...');
@@ -35,7 +34,6 @@ var postRequestHandler = function (req, res) {
 };
 
 var server = http.createServer(function (req, res) {
-    //console.log(req);
     if (req.method === 'POST') {
         postRequestHandler(req, res);
     }

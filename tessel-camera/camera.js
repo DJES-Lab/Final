@@ -11,12 +11,10 @@
  *********************************************/
 var tessel = require('tessel');
 var camera = require('camera-vc0706').use(tessel.port['D']);
+var api = require('./api');
 
 var notificationLED = tessel.led[1]; // Set up an LED to notify when we're taking a picture
 
-var pictures = [];
-var uid;
-var uName;
 
 exports.takePicture = function(type) {
     console.log('Taking a picture');
@@ -30,12 +28,12 @@ exports.takePicture = function(type) {
             var name;
             var da = new Date();
             if (type == 'userName') {
-                name = '_' + uName + '_' + da.getTime() + '.jpg';
+                name = '_' + api.getUName() + '_' + da.getTime() + '.jpg';
             }
             else {
                 name = uid + '_' + da.getTime() + '.jpg';
             }
-            pictures.push({
+            api.addPicture({
                 image: image,
                 name: name
             });
@@ -44,22 +42,6 @@ exports.takePicture = function(type) {
             //camera.disable();
         }
     });
-};
-
-exports.getPictures = function() {
-    return pictures;
-};
-
-exports.clearPictures = function() {
-    pictures.length = 0;
-};
-
-exports.setUid = function(id) {
-    uid = id;
-};
-
-exports.setUName = function(name) {
-    uName = name;
 };
 
 // Wait for the camera module to say it's ready

@@ -5,12 +5,22 @@
             <div class="thumbnail">
                 <img ng-src="{{currentUser.activeProfile ? currentUser.activeProfile : 'icons/default-user.png'}}">
             </div>
-        </div>
-        <div class="row" style="display:flex; flex-wrap: wrap;" links>
-            <div class="col-sm-3 col-md-1" ng-repeat="profileUrl in currentUser.profiles">
-                <a class="thumbnail" ng-href="{{profileUrl}}" data-gallery>
-                    <img ng-src="{{profileUrl}}">
-                </a>
+            <button class="btn btn-default btn-block" ng-click="uploadNewProfiles()">Upload Profiles with Tessel Camera <span ng-show="profileModel.waitingNewProfiles" class="glyphicon glyphicon-refresh glyphicon-spin"></span></button>
+            <h4>My Profile Pictures</h4>
+            <div class="btn btn-default btn-block" style="margin: 0 0 20px 0" ng-show="currentUser.profiles.length > profileModel.maxGroupMembers && profileModel.activeProfileGroupIndex > 0" ng-click="prevGroup()">
+                <span class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+            <div class="row" style="display:flex; flex-wrap: wrap;" links>
+                <div class="col-sm-3 col-md-4 profile-thumbnail" ng-repeat="profileUrl in profileModel.activeProfileGroup">
+                    <span class="profile-active glyphicon glyphicon-star" ng-show="profileUrl == currentUser.activeProfile"></span>
+                    <span class="profile-set-active glyphicon glyphicon-star" ng-show="profileUrl != currentUser.activeProfile" ng-click="setActiveProfile(profileUrl)"></span>
+                    <a class="thumbnail" ng-href="{{profileUrl}}" data-gallery>
+                        <img ng-src="{{profileUrl}}">
+                    </a>
+                </div>
+            </div>
+            <div class="btn btn-default btn-block" ng-show="currentUser.profiles.length > profileModel.maxGroupMembers && profileModel.activeProfileGroupIndex < profileModel.maxActiveProfileGroupIndex" ng-click="nextGroup()">
+                <span class="glyphicon glyphicon-chevron-down"></span>
             </div>
         </div>
         <div class="col-sm-6 col-md-5">

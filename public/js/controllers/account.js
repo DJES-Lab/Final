@@ -17,6 +17,28 @@ angular.module('app')
                 });
         };
 
+        var updateProfileGroup = function(profiles) {
+            if (profiles && profiles.length) {
+                var newGroup = [];
+                for (var i = 0; i < $scope.profileModel.maxGroupMembers; i++) {
+                    var selectedMemberIndex = $scope.profileModel.activeProfileGroupIndex * $scope.profileModel.maxGroupMembers + i;
+                    if (selectedMemberIndex < profiles.length)
+                        newGroup.push(profiles[selectedMemberIndex]);
+                }
+                $scope.profileModel.maxActiveProfileGroupIndex = Math.ceil(profiles.length / $scope.profileModel.maxGroupMembers) - 1;
+                $scope.profileModel.activeProfileGroup = newGroup;
+            }
+        };
+
+        $scope.profileModel = {
+            activeProfileGroupIndex: 0,
+            minActiveProfileGroupIndex: 0,
+            maxActiveProfileGroupIndex: 0,
+            maxGroupMembers: 9,
+            activeProfileGroup: [],
+            waitingNewProfiles: false
+        };
+
         $scope.rfidCardsModel = {
             cards: [],
             waitingRfidCard: false,
@@ -136,6 +158,76 @@ angular.module('app')
                     growl.error('Failed adding new card! Error: ' + err.message);
                 });
         };
+
+
+        $scope.uploadNewProfiles = function() {
+            $scope.profileModel.waitingNewProfiles = true;
+            $http.get('api/profile')
+                .then(function(res) {
+                    var profileObj = res.data;
+                    $rootScope.currentUser.profiles = profileObj.profiles;
+                    $rootScope.currentUser.activeProfile = profileObj.activeProfile;
+                    $scope.profileModel.waitingNewProfiles = false;
+                    growl.success('Profile uploaded successfully! ' + profileObj.newProfileNum + ' profiles added');
+                })
+                .catch(function(err) {
+                    $scope.profileModel.waitingNewProfiles = false;
+                    growl.error('Failed uploading new profiles from Tessel Camera! Error: ' + err.data.message);
+                })
+        };
+
+        $scope.setActiveProfile = function(newActiveProfile) {
+            if (newActiveProfile != $rootScope.currentUser.activeProfile) {
+                $http.put('api/profile/active', {
+                    activeProfile: newActiveProfile
+                })
+                    .then(function(res) {
+                        $rootScope.currentUser.activeProfile = res.data;
+                        growl.success('Your main profile picture has changed. Update successfully');
+                    })
+                    .catch(function(err) {
+                        growl.error('Failed updating your main profile picture! Error: ' + err.data.message);
+                    })
+            }
+        };
+
+        $scope.prevGroup = function() {
+            if ($scope.profileModel.activeProfileGroupIndex -1 >= 0)
+                $scope.profileModel.activeProfileGroupIndex--;
+        };
+
+        $scope.nextGroup = function() {
+            if ($scope.profileModel.activeProfileGroupIndex + 1 <= $scope.profileModel.maxActiveProfileGroupIndex)
+                $scope.profileModel.activeProfileGroupIndex++;
+        };
+
+        $scope.$watch(function() {
+            if ($rootScope.currentUser) {
+                return $rootScope.currentUser.profiles;
+            }
+            else {
+                return null;
+            }
+        }, function(newValue, oldValue) {
+            if (newValue && newValue.length) {
+                updateProfileGroup(newValue);
+            } else {
+                if (oldValue) {
+                    $scope.profileModel.activeProfileGroup = [];
+                    $scope.profileModel.maxActiveProfileGroupIndex = 0;
+                    $scope.profileModel.activeProfileGroupIndex = 0;
+                    $scope.profileModel.maxActiveProfileGroupIndex = 0;
+                }
+            }
+        });
+
+        $scope.$watch(function() {
+            return $scope.profileModel.activeProfileGroupIndex;
+        }, function(newValue, oldValue) {
+            if (newValue != oldValue) {
+                updateProfileGroup($rootScope.currentUser.profiles);
+            }
+        });
 
         getCards();
     });
