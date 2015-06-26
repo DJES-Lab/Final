@@ -2,6 +2,11 @@
 <div id="links" data-toggle="modal-gallery" data-target="#modal-gallery">
     <tabset>
         <tab heading="My Pictures" ng-click="getRfidPictures('private')">
+            <div ng-show="!rfidPicturesModel.private.length">
+                <h3>You don't have any picture yet!</h3>
+                <h3>Use your RFID card(s) to upload pictures with Tessel camera!</h3>
+                <h4>Go to <a style="text-decoration: none" href="/account">Account Page</a> to register your RFID card(s)</h4>
+            </div>
             <div ng-show="rfidPicturesModel.loadingPictures">
                 <h4>Loading Pictures... <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></h4>
             </div>
@@ -14,6 +19,10 @@
             </div>
         </tab>
         <tab heading="Public Pictures" ng-click="getRfidPictures('public')">
+            <div ng-show="!rfidPicturesModel.public.length">
+                <h3>There is no public picture</h3>
+                <h4>Go to <a style="text-decoration: none" href="/account">Account Page</a> to make some pictures public</h4>
+            </div>
             <div ng-show="rfidPicturesModel.loadingPictures">
                 <h4>Loading Pictures... <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></h4>
             </div>
