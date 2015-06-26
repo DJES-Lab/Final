@@ -225,7 +225,8 @@ angular.module('app')
             return $scope.profileModel.activeProfileGroupIndex;
         }, function(newValue, oldValue) {
             if (newValue != oldValue) {
-                updateProfileGroup($rootScope.currentUser.profiles);
+                if ($rootScope.currentUser)
+                    updateProfileGroup($rootScope.currentUser.profiles);
             }
         });
 

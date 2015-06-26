@@ -6,7 +6,7 @@
                 <img ng-src="{{currentUser.activeProfile ? currentUser.activeProfile : 'icons/default-user.png'}}">
             </div>
             <button class="btn btn-default btn-block" ng-click="uploadNewProfiles()">Upload Profiles with Tessel Camera <span ng-show="profileModel.waitingNewProfiles" class="glyphicon glyphicon-refresh glyphicon-spin"></span></button>
-            <h4>My Profile Pictures</h4>
+            <h4 ng-show="currentUser.profiles.length">My Profile Pictures</h4>
             <div class="btn btn-default btn-block" style="margin: 0 0 20px 0" ng-show="currentUser.profiles.length > profileModel.maxGroupMembers && profileModel.activeProfileGroupIndex > 0" ng-click="prevGroup()">
                 <span class="glyphicon glyphicon-chevron-up"></span>
             </div>
