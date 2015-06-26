@@ -2,7 +2,7 @@
  * Created by derek on 2015/4/13.
  */
 angular.module('app')
-    .controller('accountController', function ($rootScope, $scope, $timeout, Auth, RfidCard, $http, $q, $location, growl) {
+    .controller('accountController', function ($rootScope, $scope, $timeout, Auth, RfidCard, Profile, $q, $location, growl) {
         var setPermissionModels = function(cards) {
             cards.forEach(function(card) {
                 card.permissionModel = card.permission;
@@ -17,13 +17,22 @@ angular.module('app')
                 });
         };
 
+        var getProfiles = function() {
+            Profile.getProfiles()
+                .then(function(profileObj) {
+                    $rootScope.currentUser.profiles = profileObj.profiles;
+                    $rootScope.currentUser.activeProfile = profileObj.activeProfile;
+                })
+        };
+
         var updateProfileGroup = function(profiles) {
             if (profiles && profiles.length) {
                 var newGroup = [];
                 for (var i = 0; i < $scope.profileModel.maxGroupMembers; i++) {
                     var selectedMemberIndex = $scope.profileModel.activeProfileGroupIndex * $scope.profileModel.maxGroupMembers + i;
-                    if (selectedMemberIndex < profiles.length)
-                        newGroup.push(profiles[selectedMemberIndex]);
+                    if (selectedMemberIndex >= profiles.length)
+                        break;
+                    newGroup.push(profiles[selectedMemberIndex]);
                 }
                 $scope.profileModel.maxActiveProfileGroupIndex = Math.ceil(profiles.length / $scope.profileModel.maxGroupMembers) - 1;
                 $scope.profileModel.activeProfileGroup = newGroup;
@@ -96,19 +105,6 @@ angular.module('app')
             });
         };
 
-        //$scope.updatePermission = function(rfidId, newPermission, oldPermission) {
-        //    if (newPermission != oldPermission) {
-        //        RfidCard.updatePermission(rfidId, newPermission)
-        //            .then(function(rfid) {
-        //                growl.success('Permission updated successfully! Rfid: ' + rfid.rfid + ' New permission: ' + rfid.permission);
-        //                getCards();
-        //            })
-        //            .catch(function(err) {
-        //                growl.error('Failed updating permission: ' + oldPermission + '->' + newPermission + '! Error: ' + err.message);
-        //            });
-        //    }
-        //};
-
         $scope.checkPermissionChanged = function() {
             $timeout(function() {
                 if ($scope.rfidCardsModel.cards.length) {
@@ -162,9 +158,8 @@ angular.module('app')
 
         $scope.uploadNewProfiles = function() {
             $scope.profileModel.waitingNewProfiles = true;
-            $http.get('api/profile')
-                .then(function(res) {
-                    var profileObj = res.data;
+            Profile.newProfile()
+                .then(function(profileObj) {
                     $rootScope.currentUser.profiles = profileObj.profiles;
                     $rootScope.currentUser.activeProfile = profileObj.activeProfile;
                     $scope.profileModel.waitingNewProfiles = false;
@@ -172,21 +167,19 @@ angular.module('app')
                 })
                 .catch(function(err) {
                     $scope.profileModel.waitingNewProfiles = false;
-                    growl.error('Failed uploading new profiles from Tessel Camera! Error: ' + err.data.message);
+                    growl.error('Failed uploading new profiles from Tessel Camera! Error: ' + err.message);
                 })
         };
 
         $scope.setActiveProfile = function(newActiveProfile) {
             if (newActiveProfile != $rootScope.currentUser.activeProfile) {
-                $http.put('api/profile/active', {
-                    activeProfile: newActiveProfile
-                })
-                    .then(function(res) {
-                        $rootScope.currentUser.activeProfile = res.data;
+                Profile.updateActiveProfile(newActiveProfile)
+                    .then(function(activeProfile) {
+                        $rootScope.currentUser.activeProfile = activeProfile;
                         growl.success('Your main profile picture has changed. Update successfully');
                     })
                     .catch(function(err) {
-                        growl.error('Failed updating your main profile picture! Error: ' + err.data.message);
+                        growl.error('Failed updating your main profile picture! Error: ' + err.message);
                     })
             }
         };
@@ -231,4 +224,5 @@ angular.module('app')
         });
 
         getCards();
+        getProfiles();
     });
