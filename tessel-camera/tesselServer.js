@@ -31,6 +31,9 @@ var postRequestHandler = function (req, res) {
         event.removeListener('uploadProfile', pictureListener);
     };
     event.on('uploadProfile', pictureListener);
+    setTimeout(function() {
+        pictureListener([]);  // If no picture is taken, respond with empty picture name array
+    }, 60000);
 };
 
 var server = http.createServer(function (req, res) {
