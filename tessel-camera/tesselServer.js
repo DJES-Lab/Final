@@ -25,15 +25,21 @@ var postRequestHandler = function (req, res) {
         api.setUName(obj.username);
     });
     var pictureListener = function(pictureNames) {
-        console.log('Returning picture names...');
+        if (pictureNames.length > 0) {
+            console.log('Returning picture names...');
+        }
         res.write(JSON.stringify(pictureNames));
         res.end();
+        clearTimeout(timeout);
         event.removeListener('uploadProfile', pictureListener);
     };
     event.on('uploadProfile', pictureListener);
-    setTimeout(function() {
+    var timeout = setTimeout(function() {
+        console.log('Timeout for uploading profile!');
+        setState(0);
+        api.clearPictures();
         pictureListener([]);  // If no picture is taken, respond with empty picture name array
-    }, 60000);
+    }, 10000);
 };
 
 var server = http.createServer(function (req, res) {

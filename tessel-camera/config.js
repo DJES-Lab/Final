@@ -4,7 +4,7 @@ exports.server = {
 };
 
 exports.tesselServer = {
-    host: '192.168.1.161',
+    host: '192.168.1.174',
     port: 1234
 };
 
