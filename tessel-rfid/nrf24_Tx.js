@@ -30,7 +30,7 @@ nrf.on('ready', function () {
 
     console.log("NrfTx is ready!");
     var tx = nrf.openPipe('tx', pipes[0], {autoAck: false}), // transmit address F0F0F0F0D2
-        rx = nrf.openPipe('rx', pipes[1], {size: 4}); // receive address F0F0F0F0D2
+        rx = nrf.openPipe('rx', pipes[1], {size: 8}); // receive address F0F0F0F0D2
     tx.on('ready', function () {
         var cardListener = function(data) {
             console.log('card: ' + data);
@@ -43,7 +43,6 @@ nrf.on('ready', function () {
         event.on('sendRFIDByNrf', cardListener);
     });
     rx.on('data', function (d) {
-        console.log("Got response back:", d);
         notificationLED.high();
         setTimeout(function(){
             notificationLED.low();
