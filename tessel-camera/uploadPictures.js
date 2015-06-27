@@ -6,6 +6,8 @@ var tessel = require('tessel');
 //http.post = require('./httpJsonPost');
 //var serverConfig = require('./config').server;
 
+var notificationLED = tessel.led[0];
+
 var api = require('./api');
 var getState = require('./fsm').getState;
 var setState = require('./fsm').setState;
@@ -16,6 +18,10 @@ var event = require('./event');
 exports.uploadPictures = function() {
     var pictures = api.getPictures();
     console.log('Uploading pictures ...');
+    notificationLED.high();
+    setTimeout(function(){
+        notificationLED.low();
+    }, 2000);
 
     if (pictures.length > 0) {
         for (var i = 0; i < pictures.length; i++) {

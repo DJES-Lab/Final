@@ -169,7 +169,7 @@ angular.module('app')
                     $scope.profileModel.waitingNewProfiles = false;
                     growl.error('Failed uploading new profiles from Tessel Camera! Error: ' + err.message);
                 });
-            $q.delay(70000)
+            $q.delay(40000)
                 .then(function() {
                     getProfiles();
                 })

@@ -39,7 +39,7 @@ var postRequestHandler = function (req, res) {
         setState(0);
         api.clearPictures();
         pictureListener([]);  // If no picture is taken, respond with empty picture name array
-    }, 10000);
+    }, 30000);
 };
 
 var server = http.createServer(function (req, res) {

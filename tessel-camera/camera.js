@@ -31,7 +31,7 @@ exports.takePicture = function(type) {
                 name = '_' + api.getUName() + '_' + da.getTime() + '.jpg';
             }
             else {
-                name = uid + '_' + da.getTime() + '.jpg';
+                name = api.getUid() + '_' + da.getTime() + '.jpg';
             }
             api.addPicture({
                 image: image,

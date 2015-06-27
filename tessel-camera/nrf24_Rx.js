@@ -33,7 +33,7 @@ nrf.on('ready', function () {
         tx = nrf.openPipe('tx', pipes[1], {autoAck: false});
     rx.on('data', function (d) {
         console.log("nrf24_RX: Got rfid " + d.toString());
-        //tx.write(d);
+        tx.write(d);
 
         var state = getState();
         if (state != 2) {
